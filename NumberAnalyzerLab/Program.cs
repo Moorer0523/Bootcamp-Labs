@@ -1,4 +1,4 @@
-﻿//initialize public variable
+﻿//initialize public variables
 bool isEven;
 bool keepAlive = true;
 
@@ -26,19 +26,11 @@ while (keepAlive)
         isEven = false;
     }
 
-    //requirements for even
-    //2 - 24
-    //26 - 60
-    // < 60
-
-    //requirements for odd
-    // < 60
-    // > 60
-
-
+    //check criteria if the number is within range  
     if (userNumber >= 1 && userNumber <= 100)
     {
         //checks the bool to limit number of if/else statements
+        //current criteria doesn't include several numbers
         if (isEven)
         {
             if (userNumber >= 2 && userNumber <= 24)
@@ -66,6 +58,7 @@ while (keepAlive)
             keepAlive = false;
         }
     }
+    //retry loop if user input is bad
     else
         Console.WriteLine($"That number is out of range, lets try again {userName}");
 }
