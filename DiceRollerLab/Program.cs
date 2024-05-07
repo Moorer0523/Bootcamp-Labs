@@ -7,9 +7,9 @@ public class DiceRoller
     {
         Console.WriteLine("Lets roll some dice. To start, how many sides should the dice have?");
         string? userInput = Console.ReadLine();
-        
         bool allowedMaxNumberInput = int.TryParse(userInput, out int maxNumber);
-        while (!allowedMaxNumberInput)
+
+        while (!allowedMaxNumberInput) //verify actual input
         {
             Console.WriteLine("Error resolving input, try again.");
             userInput = Console.ReadLine();
@@ -19,7 +19,8 @@ public class DiceRoller
         Console.WriteLine("Next, how many dice should we roll?");
         userInput = Console.ReadLine();
         bool allowedDiceNumberInput = int.TryParse(userInput, out int numberOfDice);
-        while (!allowedDiceNumberInput)
+
+        while (!allowedDiceNumberInput) //verify actual input
         {
             Console.WriteLine("Error resolving input, try again.");
             userInput = Console.ReadLine();
@@ -29,16 +30,18 @@ public class DiceRoller
         return [maxNumber,numberOfDice];
     }
 
-    private static int[] MainRoll(int[] input) //takes dice side value and t;hen rolls number of dice related to it
+    private static int[] MainRoll(int[] input) //takes dice side value and then rolls number of dice related to it
     {
         int maxNumber = input[0];
         int numberOfDice = input[1];
         int[] rolls = new int[numberOfDice];
         Random rnd = new Random();
+
         for (int i = 0; i < numberOfDice; i++)
         {
             rolls[i] = rnd.Next(1, maxNumber + 1);
         }
+
         return rolls;
     }
     private static string ComboCheck(int[] rolls) //checks for designated combo pairs contained within the dice rolls
@@ -48,14 +51,17 @@ public class DiceRoller
         {
             return "Snake Eyes!";
         }
+
         else if (rolls.Count(x => x == 1) == 1 && rolls.Count(y => y == 2) == 1)
         {
             return "Ace Deuce!";
         }
+
         else if(rolls.Count(x => x == 6) == 2)
         {
             return "Box Cars!";
         }
+
         else
         {
             return string.Empty;
@@ -63,7 +69,7 @@ public class DiceRoller
     }
     private static string WinCondition(int[] rolls) // checks sum of rolls to see if it matches winning conditions.
     {
-        int total = rolls.Sum();
+        int total = rolls.Sum(); //add sum to variable to prevent calling at each if statement
 
         if (total == 7 || total == 11)
         {
@@ -74,6 +80,7 @@ public class DiceRoller
         {
             return "Craps!";
         }
+
         else
         {
             return string.Empty;
