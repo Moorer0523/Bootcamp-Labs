@@ -1,30 +1,47 @@
 ﻿
-DiceRoller diceRoller = new DiceRoller();
-diceRoller.runGame();
+DiceRoller.GameLoop();
 
 public class DiceRoller
 {
-    static int entryQuestions() //verfies acceptable input and then returns dice side value
+    private static int[] EntryQuestions() //verfies acceptable input for dice side count and number of rolling dice then returns both values
     {
         Console.WriteLine("Lets roll some dice. To start, how many sides should the dice have?");
-        string userInput = Console.ReadLine();
-        int maxNumber;
-        bool allowedInput = int.TryParse(userInput, out maxNumber);
-        while (!allowedInput)
+        string? userInput = Console.ReadLine();
+        
+        bool allowedMaxNumberInput = int.TryParse(userInput, out int maxNumber);
+        while (!allowedMaxNumberInput)
         {
             Console.WriteLine("Error resolving input, try again.");
             userInput = Console.ReadLine();
-            allowedInput = int.TryParse(userInput, out maxNumber);
+            allowedMaxNumberInput = int.TryParse(userInput, out maxNumber);
         }
-            return maxNumber;
+
+        Console.WriteLine("Next, how many dice should we roll?");
+        userInput = Console.ReadLine();
+        bool allowedDiceNumberInput = int.TryParse(userInput, out int numberOfDice);
+        while (!allowedDiceNumberInput)
+        {
+            Console.WriteLine("Error resolving input, try again.");
+            userInput = Console.ReadLine();
+            allowedDiceNumberInput = int.TryParse(userInput, out numberOfDice);
+        }
+
+        return [maxNumber,numberOfDice];
     }
 
-    static int[] mainRoll(int maxNumber) //takes dice side value and t;hen rolls number of dice related to it
+    private static int[] MainRoll(int[] input) //takes dice side value and t;hen rolls number of dice related to it
     {
+        int maxNumber = input[0];
+        int numberOfDice = input[1];
+        int[] rolls = new int[maxNumber];
         Random rnd = new Random();
-        return [rnd.Next(1, maxNumber + 1), rnd.Next(1, maxNumber + 1)];
+        for (int i = 0; i < numberOfDice + 1; i++)
+        {
+            rolls[i] = rnd.Next(1, maxNumber + 1);
+        }
+        return rolls;
     }
-    static string comboCheck(int[] rolls) //checks for designated combo pairs contained within the dice rolls
+    private static string ComboCheck(int[] rolls) //checks for designated combo pairs contained within the dice rolls
     {
 
         if (rolls.Count(x => x == 1) == 2)
@@ -44,8 +61,7 @@ public class DiceRoller
             return string.Empty;
         }
     }
-
-    static string winCondition(int[] rolls) // checks sum of rolls to see if it matches winning conditions.
+    private static string WinCondition(int[] rolls) // checks sum of rolls to see if it matches winning conditions.
     {
         int total = rolls.Sum();
 
@@ -63,16 +79,44 @@ public class DiceRoller
             return string.Empty;
         }
     }
-    public void runGame()
+    private static void PlayRound() //primary round loop
     {
-        int[] rolls = mainRoll(entryQuestions());
+        int[] rolls = MainRoll(EntryQuestions());
         Console.Write("Your rolls are: ");
+
         for (int i = 0; i < rolls.Length; i++)
         {
             Console.Write(rolls[i] + " ");
         }
-        Console.WriteLine("\nChecking for a matching combo... " + comboCheck(rolls));
-        Console.WriteLine("Checking for a winning number... " + winCondition(rolls));
 
+        Console.WriteLine("\nChecking for a matching combo... " + ComboCheck(rolls));
+        Console.WriteLine("Checking for a winning number... " + WinCondition(rolls));
+
+    }
+    private static bool ReplayCheck() //checks to see if the player would like to start a new round, otherwise returns false
+    {
+        Console.WriteLine("Would you like to play again?");
+        while (true)
+        {
+            try
+            {
+                string? playerAnswer = Console.ReadLine();
+                if (playerAnswer.ToLower().Contains('y') && playerAnswer != null)
+                {
+                    return true;
+                }
+                else break;
+            }
+            catch (ArgumentOutOfRangeException badPlayerAnswer)
+            {
+                Console.WriteLine("Error: " + badPlayerAnswer);
+            }
+        }
+        return false;
+    }
+    public static void GameLoop() //primary gameplay loop
+    {
+        do PlayRound();
+        while (ReplayCheck());
     }
 }
