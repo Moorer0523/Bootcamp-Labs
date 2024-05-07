@@ -33,9 +33,9 @@ public class DiceRoller
     {
         int maxNumber = input[0];
         int numberOfDice = input[1];
-        int[] rolls = new int[maxNumber];
+        int[] rolls = new int[numberOfDice];
         Random rnd = new Random();
-        for (int i = 0; i < numberOfDice + 1; i++)
+        for (int i = 0; i < numberOfDice; i++)
         {
             rolls[i] = rnd.Next(1, maxNumber + 1);
         }
@@ -96,23 +96,22 @@ public class DiceRoller
     private static bool ReplayCheck() //checks to see if the player would like to start a new round, otherwise returns false
     {
         Console.WriteLine("Would you like to play again?");
-        while (true)
+        string? userInput = Console.ReadLine();
+        bool userInputValid = userInput.ToLower().Contains('y') || userInput.ToLower().Contains('n');
+
+        while (!userInputValid) 
         {
-            try
-            {
-                string? playerAnswer = Console.ReadLine();
-                if (playerAnswer.ToLower().Contains('y') && playerAnswer != null)
-                {
-                    return true;
-                }
-                else break;
-            }
-            catch (ArgumentOutOfRangeException badPlayerAnswer)
-            {
-                Console.WriteLine("Error: " + badPlayerAnswer);
-            }
+            Console.WriteLine("Error resolving input, please only answer 'y' or 'n'");
+            userInput = Console.ReadLine();
+            userInputValid = userInput.ToLower().Contains('y') || userInput.ToLower().Contains('n');
         }
-        return false;
+
+        if (userInput.ToLower().Contains('y'))
+            return true;
+        else
+            return false;
+
+
     }
     public static void GameLoop() //primary gameplay loop
     {
