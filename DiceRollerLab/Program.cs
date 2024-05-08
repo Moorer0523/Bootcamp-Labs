@@ -77,15 +77,14 @@ public class DiceRoller
                 return "This is the theoretical best roll! Nice! The chances of that happening are (WIP)"; //revisit later if bored to calculate percent chance of that happening
             }
 
-            else                // at this point I am given an array of numberOfDice Size, with Max Number range of each element. At a minimum I need to run a loop N
+            else                // Given array with numberOfDice length, explore trying to remove duplicate values and counting the number of represented items.
             {
                 int[] rollUnique = rolls.Distinct().ToArray(); //remove duplicate values
-                string[] rollCounts = new string[rollUnique.Length]; //creates string array to store caluclated numbers in
                 Array.Sort(rollUnique); //Sort from smallest to largest for 
+
                 for (int i = 0; i < rollUnique.Length; i++) //loop through and count the number of times each item appears in the 
                 {
-                    rollCounts[i] = $"Count of {rollUnique[i]}: {rolls.Count(x => x == rollUnique[i])}";
-                    Console.Write('\n' + rollCounts[i]);
+                    Console.Write($"\nCount of {rollUnique[i]}: {rolls.Count(x => x == rollUnique[i])}");
                 }
                 return string.Empty;
             }
