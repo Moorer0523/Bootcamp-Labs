@@ -44,27 +44,51 @@ public class DiceRoller
 
         return rolls;
     }
-    private static string ComboCheck(int[] rolls) //checks for designated combo pairs contained within the dice rolls
+    private static string ComboCheck(int[] rolls, int maxNumber, int numberOfDice) //checks for designated combo pairs contained within the dice rolls
     {
-
-        if (rolls.Count(x => x == 1) == 2)
+        if (maxNumber == 6 && numberOfDice == 2) //added check to meet request criteria for 2d6 sided dice. conditionals work for any number of dice, but constraining to meet criteria.
         {
-            return "Snake Eyes!";
-        }
+    
+            if (rolls.Count(x => x == 1) == 2)
+            {
+                return "Snake Eyes!";
+            }
 
-        else if (rolls.Count(x => x == 1) == 1 && rolls.Count(y => y == 2) == 1)
-        {
-            return "Ace Deuce!";
-        }
+            else if (rolls.Count(x => x == 1) == 1 && rolls.Count(y => y == 2) == 1)
+            {
+                return "Ace Deuce!";
+            }
 
-        else if(rolls.Count(x => x == 6) == 2)
-        {
-            return "Box Cars!";
+            else if(rolls.Count(x => x == 6) == 2)
+            {
+                return "Box Cars!";
+            }
+
+            else
+            {
+                return string.Empty;
+            }
         }
 
         else
         {
-            return string.Empty;
+            if (rolls.Count(x => x == maxNumber) == numberOfDice)
+            {
+                return "This is the theoretical best roll! Nice! The chances of that happening are (WIP)"; //revisit later if bored to calculate percent chance of that happening
+            }
+
+            else                // at this point I am given an array of numberOfDice Size, with Max Number range of each element. At a minimum I need to run a loop N
+            {
+                int[] rollUnique = rolls.Distinct().ToArray(); //remove duplicate values
+                string[] rollCounts = new string[rollUnique.Length]; //creates string array to store caluclated numbers in
+                Array.Sort(rollUnique); //Sort from smallest to largest for 
+                for (int i = 0; i < rollUnique.Length; i++) //loop through and count the number of times each item appears in the 
+                {
+                    rollCounts[i] = $"Count of {rollUnique[i]}: {rolls.Count(x => x == rollUnique[i])}";
+                    Console.Write('\n' + rollCounts[i]);
+                }
+                return string.Empty;
+            }
         }
     }
     private static string WinCondition(int[] rolls) // checks sum of rolls to see if it matches winning conditions.
@@ -78,7 +102,7 @@ public class DiceRoller
 
         else if (total == 2 || total == 3 || total == 12)
         {
-            return "Craps!";
+            return "Craps! You achieved a total of 2, 3, or 12";
         }
 
         else
@@ -88,7 +112,8 @@ public class DiceRoller
     }
     private static void PlayRound() //primary round loop
     {
-        int[] rolls = MainRoll(EntryQuestions());
+        int[] entryResults = EntryQuestions();
+        int[] rolls = MainRoll(entryResults);
         Console.Write("Your rolls are: ");
 
         for (int i = 0; i < rolls.Length; i++)
@@ -96,7 +121,9 @@ public class DiceRoller
             Console.Write(rolls[i] + " ");
         }
 
-        Console.WriteLine("\nChecking for a matching combo... " + ComboCheck(rolls));
+        Console.WriteLine($"\nYour total roll value was {rolls.Sum()}"); //sum all together for criteria requirement
+
+        Console.WriteLine("\nChecking for a matching combo... " + ComboCheck(rolls, entryResults[0], entryResults[1])); //added entry result values to meet criteria of ask
         Console.WriteLine("Checking for a winning number... " + WinCondition(rolls));
 
     }
@@ -116,8 +143,10 @@ public class DiceRoller
         if (userInput.ToLower().Contains('y'))
             return true;
         else
+        {
+            Console.WriteLine("Thank you for playing.");
             return false;
-
+        }
 
     }
     public static void GameLoop() //primary gameplay loop
