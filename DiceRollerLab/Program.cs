@@ -11,7 +11,7 @@ public class DiceRoller
 
         while (!allowedMaxNumberInput) //verify actual input
         {
-            Console.WriteLine("Error resolving input, try again.");
+            Console.WriteLine("Error resolving input, try again. How many sides should the dice have?");
             userInput = Console.ReadLine();
             allowedMaxNumberInput = int.TryParse(userInput, out maxNumber);
         }
@@ -22,7 +22,7 @@ public class DiceRoller
 
         while (!allowedDiceNumberInput) //verify actual input
         {
-            Console.WriteLine("Error resolving input, try again.");
+            Console.WriteLine("Error resolving input, try again. Next, how many dice should we roll?");
             userInput = Console.ReadLine();
             allowedDiceNumberInput = int.TryParse(userInput, out numberOfDice);
         }
@@ -48,7 +48,6 @@ public class DiceRoller
     {
         if (maxNumber == 6 && numberOfDice == 2) //added check to meet request criteria for 2d6 sided dice. conditionals work for any number of dice, but constraining to meet criteria.
         {
-    
             if (rolls.Count(x => x == 1) == 2)
             {
                 return "Snake Eyes!";
@@ -70,44 +69,55 @@ public class DiceRoller
             }
         }
 
-        else
+        else //including section to calculate some form of a return for alternate sized dice and varied number of rolls
         {
             if (rolls.Count(x => x == maxNumber) == numberOfDice)
             {
-                return "This is the theoretical best roll! Nice! The chances of that happening are (WIP)"; //revisit later if bored to calculate percent chance of that happening
+                return "This is the theoretical best roll! Nice! The chances of that happening are " + (1/(numberOfDice*maxNumber))*100; //revisit later if bored to calculate percent chance of that happening
             }
 
-            else                // Given array with numberOfDice length, explore trying to remove duplicate values and counting the number of represented items.
+            else // Given array with numberOfDice length, explore trying to remove duplicate values and counting the number of represented items.
             {
                 int[] rollUnique = rolls.Distinct().ToArray(); //remove duplicate values
-                Array.Sort(rollUnique); //Sort from smallest to largest for 
+                Array.Sort(rollUnique);
 
-                for (int i = 0; i < rollUnique.Length; i++) //loop through and count the number of times each item appears in the 
+                //for (int i = 0; i < rollUnique.Length; i++) //swapping out to foreach loop
+                foreach (int i in rollUnique)
                 {
-                    Console.Write($"\nCount of {rollUnique[i]}: {rolls.Count(x => x == rollUnique[i])}");
+                    //Console.Write($"\nCount of {rollUnique[i]}: {rolls.Count(x => x == rollUnique[i])}"); 
+                    Console.Write($"\nCount of {i}: {rolls.Count(x => x == i)}");
                 }
                 return string.Empty;
             }
         }
     }
-    private static string WinCondition(int[] rolls) // checks sum of rolls to see if it matches winning conditions.
+    private static string WinCondition(int[] rolls, int maxNumber, int numberOfDice) // checks sum of rolls to see if it matches winning conditions.
     {
-        int total = rolls.Sum(); //add sum to variable to prevent calling at each if statement
-
-        if (total == 7 || total == 11)
+        string message = rolls.Sum() switch
         {
-            return "Winner!";
-        }
+            
+            7 or 10 when maxNumber == 6 && numberOfDice == 2 => "Winner",
+            2 or 3 or 12 when maxNumber == 6 && numberOfDice == 2 => "Craps! You achieved a total of 2, 3, or 12",
+            _ => string.Empty,
+        };
+        return message;
 
-        else if (total == 2 || total == 3 || total == 12)
-        {
-            return "Craps! You achieved a total of 2, 3, or 12";
-        }
+        //replaced in favor of a switch
+        //if (total == 7 || total == 11) 
+        //    {
+        //        return "Winner!";
+        //    }
 
-        else
-        {
-            return string.Empty;
-        }
+        //    else if (total == 2 || total == 3 || total == 12)
+        //    {
+        //        return "Craps! You achieved a total of 2, 3, or 12";
+        //    }
+
+        //    else
+        //    {
+        //        return string.Empty;
+        //    }
+
     }
     private static void PlayRound() //primary round loop
     {
@@ -123,8 +133,7 @@ public class DiceRoller
         Console.WriteLine($"\nYour total roll value was {rolls.Sum()}"); //sum all together for criteria requirement
 
         Console.WriteLine("\nChecking for a matching combo... " + ComboCheck(rolls, entryResults[0], entryResults[1])); //added entry result values to meet criteria of ask
-        Console.WriteLine("Checking for a winning number... " + WinCondition(rolls));
-
+        Console.WriteLine("Checking for a winning number... " + WinCondition(rolls, entryResults[0], entryResults[1]));
     }
     private static bool ReplayCheck() //checks to see if the player would like to start a new round, otherwise returns false
     {
