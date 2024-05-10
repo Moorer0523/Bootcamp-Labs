@@ -3,7 +3,7 @@ DiceRoller.GameLoop();
 
 public class DiceRoller
 {
-    private static int[] EntryQuestions() //verfies acceptable input for dice side count and number of rolling dice then returns both values
+    private static int[] EntryQuestions() //verfies acceptable input for dice side count and number of rolling dice then returns both values. Revisit later to refactor into single method to call twice
     {
         Console.WriteLine("Lets roll some dice. To start, how many sides should the dice have?");
         string? userInput = Console.ReadLine();
@@ -20,7 +20,7 @@ public class DiceRoller
         userInput = Console.ReadLine();
         bool allowedDiceNumberInput = int.TryParse(userInput, out int numberOfDice);
 
-        while (!allowedDiceNumberInput) //verify actual input
+        while (!allowedDiceNumberInput) //duplicate effort with different strings...bad
         {
             Console.WriteLine("Error resolving input, try again. Next, how many dice should we roll?");
             userInput = Console.ReadLine();
@@ -81,10 +81,8 @@ public class DiceRoller
                 int[] rollUnique = rolls.Distinct().ToArray(); //remove duplicate values
                 Array.Sort(rollUnique);
 
-                //for (int i = 0; i < rollUnique.Length; i++) //swapping out to foreach loop
                 foreach (int i in rollUnique)
                 {
-                    //Console.Write($"\nCount of {rollUnique[i]}: {rolls.Count(x => x == rollUnique[i])}"); 
                     Console.Write($"\nCount of {i}: {rolls.Count(x => x == i)}");
                 }
                 return string.Empty;
@@ -93,14 +91,13 @@ public class DiceRoller
     }
     private static string WinCondition(int[] rolls, int maxNumber, int numberOfDice) // checks sum of rolls to see if it matches winning conditions.
     {
-        string message = rolls.Sum() switch
+        return rolls.Sum() switch
         {
             
             7 or 10 when maxNumber == 6 && numberOfDice == 2 => "Winner",
             2 or 3 or 12 when maxNumber == 6 && numberOfDice == 2 => "Craps! You achieved a total of 2, 3, or 12",
             _ => string.Empty,
         };
-        return message;
 
         //replaced in favor of a switch
         //if (total == 7 || total == 11) 
@@ -123,6 +120,21 @@ public class DiceRoller
     {
         int[] entryResults = EntryQuestions();
         int[] rolls = MainRoll(entryResults);
+        string comboMessage = ComboCheck(rolls, entryResults[0], entryResults[1]);
+        string winMessage = WinCondition(rolls, entryResults[0], entryResults[1]);
+
+        // added section for improved UX
+        if (comboMessage == null) 
+        {
+            comboMessage = "No matching combinations.";
+        }
+
+        if (winMessage == null)
+        {
+            winMessage = "No matching win conditions.";
+        }    
+
+
         Console.Write("Your rolls are: ");
 
         for (int i = 0; i < rolls.Length; i++)
@@ -132,8 +144,8 @@ public class DiceRoller
 
         Console.WriteLine($"\nYour total roll value was {rolls.Sum()}"); //sum all together for criteria requirement
 
-        Console.WriteLine("\nChecking for a matching combo... " + ComboCheck(rolls, entryResults[0], entryResults[1])); //added entry result values to meet criteria of ask
-        Console.WriteLine("Checking for a winning number... " + WinCondition(rolls, entryResults[0], entryResults[1]));
+        Console.WriteLine("\nChecking for a matching combo... " + comboMessage); //added entry result values to meet criteria of ask
+        Console.WriteLine("Checking for a winning number... " + winMessage);
     }
     private static bool ReplayCheck() //checks to see if the player would like to start a new round, otherwise returns false
     {
