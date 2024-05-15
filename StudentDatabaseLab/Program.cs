@@ -25,6 +25,7 @@ Extra Challenges:
 
 
 
+using System.Collections;
 using System.Collections.Specialized;
 
 //TODO Figure out standarized spacing for console reporting
@@ -36,6 +37,7 @@ using System.Collections.Specialized;
 
 Student student = new Student();
 
+student.MainMenu();
 public class Student
 {
 
@@ -54,7 +56,7 @@ public class Student
         {"Jack", "Houston", "Pancakes" },
     };
 
-    ListDictionary nameDirectory = new ListDictionary
+    Hashtable nameDirectory = new Hashtable
     {
         {0, "Alice" },
         {1, "Bob" },
@@ -76,12 +78,18 @@ public class Student
         {
             Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}",i, students[i, 0], students[i, 1], students[i, 2]));
         }
+        MainMenu();
     }
-    string MainMenu()
+    public string? MainMenu()
     {
-        Console.WriteLine("STUDENT DIRECTORY: Please enter the student's name or their studentID. Type !Help to see a full list");
+        Console.WriteLine("Main Menu: Please enter the student's name or their studentID. Type !Help to see a full list");
         string userInput = Console.ReadLine(); //options here are either null/void, incorrect, name, ID, help
 
+        while (string.IsNullOrEmpty(userInput)) //handles null/void
+        {
+            Console.WriteLine("Error, no input detected. Please try again. Enter the student name or their studentID. Type !Help to see a full list");
+            userInput = Console.ReadLine();
+        }
         if (userInput.ToLower() == "!help") //handles help case
         {
             HelpResponse();
@@ -89,32 +97,26 @@ public class Student
         }
         else
         {
-            while (string.IsNullOrEmpty(userInput)) //handles null/void
-            {
-                Console.WriteLine("Error, no input detected. Please try again. Enter the student name or their studentID. Type !Help to see a full list");
-                userInput = Console.ReadLine();
-            }
-            if (int.TryParse(userInput, out int id)) //handles ID input
-            { return id.ToString(); }
-            else
-            {
-                for (int i = 0; i < students.GetLength(0); i++)
-                {
-                    if (userInput.ToLower() == students[i, 0].ToLower())
-                        return students[i, 0];
-                }
-                return string.Empty;
-            }
+
+            return ValidInputParse(userInput);
 
         }
     }
 
-    private void HelpDisplay()
+    private string? ValidInputParse(string userInput)
     {
-        Console.WriteLine("Request for help approved, now printing all available student information");
-        for (int i = 0; i < students.GetLength(0);)
+        if (int.TryParse(userInput, out int id)) //handles ID input
         {
-
+            return nameDirectory[id] as string;
+        }
+        else
+        {
+            for (int i = 0; i < students.GetLength(0); i++)
+            {
+                if (userInput.ToLower() == students[i, 0].ToLower())
+                    return students[i, 0];
+            }
+            return string.Empty;
         }
     }
     public static void main()
