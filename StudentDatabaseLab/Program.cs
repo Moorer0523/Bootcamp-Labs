@@ -24,27 +24,16 @@ Extra Challenges:
  */
 
 
-
-
-
 using System.Collections;
 using System.Collections.Specialized;
 
-//TODO Figure out standarized spacing for console reporting
-//int index = 0;
-//int alignmentSpacing = -25;
-//string formatting = $"0, {alignmentSpacing}|";
-//Console.WriteLine("Help is on the way. Now printing the entire table:");
-//Console.WriteLine(string.Format(formatting, "This is a test space."));
-
 Student student = new Student();
-
-Console.WriteLine(student.MainMenu());
+student.main();
 public class Student
 {
+
     string[,] students = new string[,]
     {
-        {"Alice", "Seattle", "Pizza" },
         {"Bob", "Chicago", "Sushi" },
         {"Charlie", "New York", "Burgers" },
         {"David", "Los Angeles", "Tacos" },
@@ -54,11 +43,12 @@ public class Student
         {"Henry", "Boston", "Steak" },
         {"Isabella", "Denver", "Tacos" },
         {"Jack", "Houston", "Pancakes" },
+        {"Alice", "Seattle", "Pizza" }
     };
     //Hashtable nameDirectory = new Hashtable //replaced with dictionary
     Dictionary<int, string> nameDirectory = new Dictionary<int, string>
     {
-        {0, "Alice" },
+
         {1, "Bob" },
         {2, "Charlie" },
         {3, "David" },
@@ -67,8 +57,10 @@ public class Student
         {6, "Grace" },
         {7, "Henry" },
         {8, "Isabella" },
-        {9, "Jack" }
+        {9, "Jack" },
+        {10, "Alice" }
     };
+
 
     private void HelpResponse()
     {
@@ -76,68 +68,56 @@ public class Student
         Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}","ID", "Name", "Hometown", "Favorite Food" + Environment.NewLine));
         for (int i = 0; i < students.GetLength(0); i++)
         {
-            Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}",i, students[i, 0], students[i, 1], students[i, 2]));
+            Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}",i+1, students[i, 0], students[i, 1], students[i, 2]));
         }
         Console.WriteLine("Returning to main menu.");
 
-        //MainMenu();
     }
-    public string? MainMenu()
-    {
-        Console.WriteLine("Main Menu: Please enter the student's name or their studentID. Type !Help to see a full list"); //TODO Move this area down to in the WHILE loop to avoid recursively calling the main method.
-        string userInput = Console.ReadLine(); //options here are either null/void, incorrect, name, ID, help
-        while (string.IsNullOrEmpty(userInput) || !ValidInput(userInput)) //checks for null/void AND valid input
-        {
 
+    //TODO Change from converting to string and searching array to converting string to into and using that to index?
+
+    private string? StudentDetailSelection(string selectedAttribute, int arrayIndex) //refactored to combine all into a single method.
+    {
+        string userInput;
+        while (true) //checks for null/void AND valid input
+        {
+            if (arrayIndex == 0)
+            {
+            Console.WriteLine($"Please enter the student's {selectedAttribute}. Type !Help to see a full list");
+             userInput = Console.ReadLine(); //options here are either null/void, incorrect, name, ID, help
+            }
+            else
+            {
+                userInput = selectedAttribute;
+            }
             if (userInput.ToLower() == "!help") //handles help case
             {
                 HelpResponse();
             }
             else
             {
-                Console.WriteLine("Error with reading your input. Please try again. Enter the student name or their studentID. Type !Help to see a full list");
-                userInput = Console.ReadLine();
-            }
-        } 
-
-        return InputParse(userInput); //returns name of student selected?
-    }
-
-    private bool ValidInput(string userInput)
-    {
-
-        if (int.TryParse(userInput, out int id)) //handles ID input
-        {
-            return true;
-        }
-        else
-        {
-            for (int i = 0; i < students.GetLength(0); i++)
-            {
+                if (int.TryParse(userInput, out int id) && arrayIndex == 0) //Checks for valid input of ID for name and converts to string name
+                {
+                    userInput = nameDirectory[id] as string;
+                }
+                    for (int i = 0; i < students.GetLength(0); i++)
+                {
                     if (userInput.ToLower() == students[i, 0].ToLower())
-                        return true; 
+                        return students[i,arrayIndex];
+                }
+                Console.WriteLine("Error with reading your input. Returning to Main Menu");
             }
-            return false;
         }
     }
-    private string? InputParse(string userInput)
+    public void main()
     {
-        if (int.TryParse(userInput, out int id)) //handles ID input
-        {
-            return nameDirectory[id] as string;
-        }
-        else
-        {
-            for (int i = 0; i < students.GetLength(0); i++)
-            {
-                if (userInput.ToLower() == students[i, 0].ToLower())
-                    return students[i, 0];
-            }
-            return string.Empty;
-        }
-    }
-    public static void main()
-    {
+        Console.WriteLine($"Main Menu: Please enter the student's name or ID. Type !Help to see a full list");
+        string studentName = StudentDetailSelection("name or ID",0);
 
+        Console.WriteLine($"Looking up details for {studentName}."); //TODO Convert to if / switch to determine hometown or favorite food
+        string homeTown = StudentDetailSelection(studentName, 1);
+        string favoriteFood = StudentDetailSelection(studentName,2);
+
+        Console.WriteLine($"{studentName} {homeTown} {favoriteFood}");
     }
 }
