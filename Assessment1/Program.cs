@@ -20,7 +20,7 @@ static double AverageGrades(double grade1, double grade2, double grade3)
 
 static string OddOrEvenAndPassing(double grade)
 {
-    bool passed = IsPassing(grade);
+    bool passed = IsPassing((int)grade);
 
     if (passed)
     {
