@@ -1,11 +1,8 @@
 ﻿
-
 Console.WriteLine(IsPassing(65));
 Console.WriteLine(IsPassing(75));
 
-
 Console.WriteLine(AverageGrades(55,65,75));
-
 
 Console.WriteLine(OddOrEvenAndPassing(55));
 Console.WriteLine(OddOrEvenAndPassing(54));
