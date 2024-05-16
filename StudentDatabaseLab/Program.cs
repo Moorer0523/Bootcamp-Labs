@@ -25,6 +25,8 @@ Extra Challenges:
 
 
 
+
+
 using System.Collections;
 using System.Collections.Specialized;
 
@@ -37,11 +39,9 @@ using System.Collections.Specialized;
 
 Student student = new Student();
 
-student.MainMenu();
+Console.WriteLine(student.MainMenu());
 public class Student
 {
-
-
     string[,] students = new string[,]
     {
         {"Alice", "Seattle", "Pizza" },
@@ -55,8 +55,8 @@ public class Student
         {"Isabella", "Denver", "Tacos" },
         {"Jack", "Houston", "Pancakes" },
     };
-
-    Hashtable nameDirectory = new Hashtable
+    //Hashtable nameDirectory = new Hashtable //replaced with dictionary
+    Dictionary<int, string> nameDirectory = new Dictionary<int, string>
     {
         {0, "Alice" },
         {1, "Bob" },
@@ -78,32 +78,49 @@ public class Student
         {
             Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}",i, students[i, 0], students[i, 1], students[i, 2]));
         }
-        MainMenu();
+        Console.WriteLine("Returning to main menu.");
+
+        //MainMenu();
     }
     public string? MainMenu()
     {
-        Console.WriteLine("Main Menu: Please enter the student's name or their studentID. Type !Help to see a full list");
+        Console.WriteLine("Main Menu: Please enter the student's name or their studentID. Type !Help to see a full list"); //TODO Move this area down to in the WHILE loop to avoid recursively calling the main method.
         string userInput = Console.ReadLine(); //options here are either null/void, incorrect, name, ID, help
+        while (string.IsNullOrEmpty(userInput) || !ValidInput(userInput)) //checks for null/void AND valid input
+        {
 
-        while (string.IsNullOrEmpty(userInput)) //handles null/void
+            if (userInput.ToLower() == "!help") //handles help case
+            {
+                HelpResponse();
+            }
+            else
+            {
+                Console.WriteLine("Error with reading your input. Please try again. Enter the student name or their studentID. Type !Help to see a full list");
+                userInput = Console.ReadLine();
+            }
+        } 
+
+        return InputParse(userInput); //returns name of student selected?
+    }
+
+    private bool ValidInput(string userInput)
+    {
+
+        if (int.TryParse(userInput, out int id)) //handles ID input
         {
-            Console.WriteLine("Error, no input detected. Please try again. Enter the student name or their studentID. Type !Help to see a full list");
-            userInput = Console.ReadLine();
-        }
-        if (userInput.ToLower() == "!help") //handles help case
-        {
-            HelpResponse();
-            return string.Empty;
+            return true;
         }
         else
         {
-
-            return ValidInputParse(userInput);
-
+            for (int i = 0; i < students.GetLength(0); i++)
+            {
+                    if (userInput.ToLower() == students[i, 0].ToLower())
+                        return true; 
+            }
+            return false;
         }
     }
-
-    private string? ValidInputParse(string userInput)
+    private string? InputParse(string userInput)
     {
         if (int.TryParse(userInput, out int id)) //handles ID input
         {
