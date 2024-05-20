@@ -60,7 +60,13 @@ public class Student
         {9, "Jack" },
         {10, "Alice" }
     };
+    Dictionary<int, string> attributeMap = new Dictionary<int, string> //created away from hardcoding to account for further attributes later? IDK maybe should all be objects.
+    {
+        {0, "Name"},
+        {1, "Hometown"},
+        {2, "Favorite Food"},
 
+    };
 
     private void HelpResponse()
     {
@@ -90,17 +96,18 @@ public class Student
             {
                 userInput = selectedAttribute;
             }
+
             if (userInput.ToLower() == "!help") //handles help case
             {
                 HelpResponse();
             }
             else
             {
-                if (int.TryParse(userInput, out int id) && arrayIndex == 0) //Checks for valid input of ID for name and converts to string name
+                if (int.TryParse(userInput, out int id) && arrayIndex == 0 && id < nameDirectory.Count() && id > 0) //Checks for valid input of ID for name and converts to string name
                 {
                     userInput = nameDirectory[id] as string;
                 }
-                    for (int i = 0; i < students.GetLength(0); i++)
+                for (int i = 0; i < students.GetLength(0); i++)
                 {
                     if (userInput.ToLower() == students[i, 0].ToLower())
                         return students[i,arrayIndex];
@@ -109,15 +116,53 @@ public class Student
             }
         }
     }
+    private int StudentAttributePicker(string studentName)
+    {
+        while (true)
+        {
+            Console.WriteLine("Please input the desired information category. The current options are:");
+            for (int i = 1; i < attributeMap.Count; i++)//starting at 1 to skip name printing
+            {
+                Console.WriteLine($"{i}. {attributeMap[i]}");
+            }
+            string userInput = Console.ReadLine();
+            if (int.TryParse(userInput, out int id) && id < attributeMap.Count && id > 0)
+            {
+                return id;
+            }
+            else
+            {
+                for (int i = 1; i < attributeMap.Count;i++)
+                {
+                    if (attributeMap[i].ToLower().Contains(userInput.ToLower()))
+                        return i;
+                }
+                Console.WriteLine("Error reading input. Please type either the information Category name or number.");
+            }
+
+        }
+    }
     public void main()
     {
-        Console.WriteLine($"Main Menu: Please enter the student's name or ID. Type !Help to see a full list");
-        string studentName = StudentDetailSelection("name or ID",0);
+        while(true) { 
+            Console.WriteLine($"Main Menu:");
+            string studentName = StudentDetailSelection("name or ID",0);
 
-        Console.WriteLine($"Looking up details for {studentName}."); //TODO Convert to if / switch to determine hometown or favorite food
-        string homeTown = StudentDetailSelection(studentName, 1);
-        string favoriteFood = StudentDetailSelection(studentName,2);
+            Console.WriteLine($"Looking up details for {studentName}."); //TODO Convert to if / switch to determine hometown or favorite food
 
-        Console.WriteLine($"{studentName} {homeTown} {favoriteFood}");
+            int selectedAttribute = StudentAttributePicker(studentName);
+
+            Console.WriteLine($"{studentName}'s {attributeMap[selectedAttribute]} is {StudentDetailSelection(studentName, selectedAttribute)}");
+
+
+            //string homeTown = StudentDetailSelection(studentName, 1);
+            //string favoriteFood = StudentDetailSelection(studentName,2);
+            //Console.WriteLine($"{studentName} {homeTown} {favoriteFood}");
+
+            Console.WriteLine("Would you like to look up details for another student?(Y/N)");
+            if (Console.ReadLine().ToLower().Contains("n"))
+                break;
+        }
+        Console.Write("Returning to the main menu. ");
     }
 }

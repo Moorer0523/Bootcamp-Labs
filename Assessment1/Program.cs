@@ -24,14 +24,14 @@ static string OddOrEvenAndPassing(double grade)
 
     if (passed)
     {
-        if (grade % 2 == 0)
+        if ((int)grade % 2 == 0) //added casting to account for double input
             return "Passing and even";
         else
             return "Passing and odd";
     }
     else
     {
-        if (grade % 2 == 0)
+        if ((int)grade % 2 == 0) //added casting to account for double input
             return "failing and even";
         else
             return "failing and odd";
