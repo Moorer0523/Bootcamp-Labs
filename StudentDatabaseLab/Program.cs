@@ -23,12 +23,6 @@ Extra Challenges:
 
  */
 
-
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-
 Student student = new Student();
 student.main();
 public class Student
@@ -72,14 +66,13 @@ public class Student
 
     private void HelpResponse()
     {
-        Console.WriteLine("Help is on the way. Now printing the entire table:");
+        Console.WriteLine("Help is on the way. Now printing the entire table:\n");
         Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}","ID", "Name", "Hometown", "Favorite Food" + Environment.NewLine));
         for (int i = 0; i < students.GetLength(0); i++)
         {
             Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}",i+1, students[i, 0], students[i, 1], students[i, 2]));
         }
-        Console.WriteLine("Returning to main menu.");
-
+        Console.WriteLine("\nReturning to main menu.");
     }
 
     //TODO Change from converting to string and searching array to converting string to into and using that to index?
@@ -114,7 +107,7 @@ public class Student
                     if (userInput.ToLower() == students[i, 0].ToLower())
                         return students[i, arrayIndex];
                 }
-                Console.WriteLine("Error with reading your input. Returning to Main Menu");
+                Console.WriteLine("Error with reading your input. Returning to Main Menu\n");
             }
         }
     }
