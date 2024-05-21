@@ -25,6 +25,8 @@ Extra Challenges:
 
 
 using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
 Student student = new Student();
@@ -32,7 +34,7 @@ student.main();
 public class Student
 {
 
-    string[,] students = new string[,]
+    readonly string[,] students = new string[,]
     {
         {"Bob", "Chicago", "Sushi" },
         {"Charlie", "New York", "Burgers" },
@@ -46,7 +48,7 @@ public class Student
         {"Alice", "Seattle", "Pizza" }
     };
     //Hashtable nameDirectory = new Hashtable //replaced with dictionary
-    Dictionary<int, string> nameDirectory = new Dictionary<int, string>
+    readonly Dictionary<int, string> nameDirectory = new Dictionary<int, string>
     {
 
         {1, "Bob" },
@@ -60,7 +62,7 @@ public class Student
         {9, "Jack" },
         {10, "Alice" }
     };
-    Dictionary<int, string> attributeMap = new Dictionary<int, string> //created away from hardcoding to account for further attributes later? IDK maybe should all be objects.
+    readonly Dictionary<int, string> attributeMap = new Dictionary<int, string> //created away from hardcoding to account for further attributes later? IDK maybe should all be objects?
     {
         {0, "Name"},
         {1, "Hometown"},
@@ -103,14 +105,14 @@ public class Student
             }
             else
             {
-                if (int.TryParse(userInput, out int id) && arrayIndex == 0 && id < nameDirectory.Count() && id > 0) //Checks for valid input of ID for name and converts to string name
+                if (int.TryParse(userInput, out int id) && arrayIndex == 0 && nameDirectory.ContainsKey(id)) //Checks for valid input of ID for name and converts to string name
                 {
                     userInput = nameDirectory[id] as string;
                 }
                 for (int i = 0; i < students.GetLength(0); i++)
                 {
                     if (userInput.ToLower() == students[i, 0].ToLower())
-                        return students[i,arrayIndex];
+                        return students[i, arrayIndex];
                 }
                 Console.WriteLine("Error with reading your input. Returning to Main Menu");
             }
@@ -148,12 +150,11 @@ public class Student
             Console.WriteLine($"Main Menu:");
             string studentName = StudentDetailSelection("name or ID",0);
 
-            Console.WriteLine($"Looking up details for {studentName}."); //TODO Convert to if / switch to determine hometown or favorite food
+            Console.WriteLine($"Looking up details for {studentName}.");
 
             int selectedAttribute = StudentAttributePicker(studentName);
 
             Console.WriteLine($"{studentName}'s {attributeMap[selectedAttribute]} is {StudentDetailSelection(studentName, selectedAttribute)}");
-
 
             //string homeTown = StudentDetailSelection(studentName, 1);
             //string favoriteFood = StudentDetailSelection(studentName,2);
