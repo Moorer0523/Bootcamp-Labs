@@ -8,13 +8,13 @@ namespace MovieDatabaseLab
 {
     public class Movie
     {
-        public string title;
-        public string category;
+        public string Title { get; set; }
+        public string Category { get; set; }
 
         public Movie(string title, string category)
         {
-            this.title = title;
-            this.category = category;
+            this.Title = title;
+            this.Category = category;
         }
 
     }
