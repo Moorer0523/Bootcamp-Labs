@@ -31,7 +31,7 @@ string UserInputResolve(string userInput) //TODO Structure rest of program now t
     {
         try
         {
-            if (userInput.ToLower().Contains("option") || userInput.ToLower().IndexOf("1") > 0) //case handling optionlist input TODO: Rework to be scalable?
+            if (userInput.ToLower().Contains("option") || userInput.ToLower().IndexOf("1") > 0) //case handling option list input TODO: Rework to be scalable?
             {
                 Console.WriteLine(string.Join("\n", movieList.Select(x => x.Category).Distinct().ToList()));
             }
@@ -42,6 +42,10 @@ string UserInputResolve(string userInput) //TODO Structure rest of program now t
                 {
                     Console.WriteLine(string.Format("{0, 25} {1, 15}",movie.Title,movie.Category));
                 }
+            }
+            else 
+            {
+                //foreach (Movie movie in movieList.Where( x => userInput.ToLower() == x.Category.ToLower())) { } //TODO MOve this section out to its own method
             }
             return "placeholder";
         }
