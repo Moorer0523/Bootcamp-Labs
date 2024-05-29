@@ -26,7 +26,7 @@ while (true)
     if (ValidateUserInput(userInput))
     {
         CategorySearchReturn(userInput);
-        if (ReplayCheck())
+        if (!ReplayCheck())
             break;
     }
 
