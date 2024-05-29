@@ -39,7 +39,7 @@ bool ValidateUserInput(string userInput) //TODO Structure rest of program now th
         {
             if (userInput.ToLower().Contains("option") || userInput.ToLower().IndexOf("1") > 0) //case handling option list input TODO: Rework to be scalable?
             {
-                Console.WriteLine(string.Join("\n", movieList.Select(x => x.Category).Distinct().ToList()));
+                Console.WriteLine(string.Join("\n", movieList.Select(x => x.Category).Distinct().ToList().Order()));
                 return false;
             }
             else if (userInput.ToLower().Contains("everything") || userInput.ToLower().IndexOf("2") > 0) 
@@ -72,6 +72,7 @@ bool ValidateUserInput(string userInput) //TODO Structure rest of program now th
 
 void CategorySearchReturn(string userInput)
 {
+    Console.WriteLine(string.Join("\n", movieList.Where(x => userInput.ToLower() == x.Category.ToLower()).ToList()).ToList());
     foreach (Movie movie in movieList.Where(x => userInput.ToLower() == x.Category.ToLower()))
     {
         Console.WriteLine(string.Format("{0, 25} {1, 15}", movie.Title, movie.Category));
