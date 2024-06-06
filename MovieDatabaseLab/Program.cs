@@ -49,6 +49,7 @@ public static partial class Main {
             {
                 if (userInput.ToLower().Contains("option") || userInput.IndexOf('1') > -1) //case handling option list input TODO: Rework to be scalable?
                 {
+                    List<string> categories = new List<string>(movieList.Select(x => x.Category).Distinct().ToList().Order()); //TODO Break out into handling number input options for categories
                     Console.WriteLine(string.Join("\n", movieList.Select(x => x.Category).Distinct().ToList().Order()));
                     return false;
                 }
@@ -61,7 +62,7 @@ public static partial class Main {
                     }
                     return false;
                 }
-                else if (movieList.Where(x => userInput.ToLower() == x.Category.ToLower()).Count() > 0)
+                else if (movieList.Where(x => userInput.ToLower() == x.Category.ToLower()).Count() > 0) //TODO Add in case to check for category or break out for another case? //|| categoryMenu.ContainsKey(int.TryParse(userInput, out int x))
                 {
                     return true;
                 }
@@ -82,7 +83,7 @@ public static partial class Main {
 
     private static void CategorySearchReturn(string userInput)
     {
-        //Ok too long. Dont use it like this.
+        //always break these statements down to make it a little easier to sort through.
         Console.WriteLine(string.Join("\n", movieList
             .Where(x => userInput.ToLower() == x.Category.ToLower()) //filter
             .OrderBy(x => x.Title)//sort
