@@ -1,21 +1,8 @@
 ﻿using RoshamboLab;
 
-Console.WriteLine("What is your name");
-string userName = Console.ReadLine();
-while (true)
-{
-    Console.WriteLine("Who do you want to be your opponent? Your options are:\n1) Rock Player\n2) Random Player");
-    string userInput = Console.ReadLine();
-    Player opponent = Console.ReadLine().ToLower() switch //dont use a switch this is weird.
-    {
-        "1" when int.TryParse(userInput,) => new RockPlayer(),
-        "2" or 
-    }
-
-}
-
-
-class RoshamboProgram
+RoshamboProgram roshamboProgram = new RoshamboProgram();
+roshamboProgram.HumanOptionChoice();
+ class RoshamboProgram
 {
     HumanPlayer humanPlayer = new HumanPlayer();
     
@@ -25,26 +12,32 @@ class RoshamboProgram
         return Console.ReadLine();
     }
     
-    private void HumanOptionChoice()
+    public void HumanOptionChoice()
     {
         while (true)
         {
-            Console.WriteLine("Pick a an option:");
+            Console.WriteLine("Pick a an option: 1) 'Rock' 2) 'Paper' 3) 'Scissors'. ");
             try
             {
                 string userInput = Console.ReadLine();
-                if (Enum.TryParse(userInput, true, out RoshamboValue value))
+                if (Enum.IsDefined(typeof(RoshamboValue), userInput)) // Doesnt work and needs a refactor
                 {
-                    humanPlayer.Value = value;
+
+                    humanPlayer.Value = (RoshamboValue)Enum.Parse(typeof(RoshamboValue), userInput);
                     break;
+                }
+                else if (int.Parse(userInput) < Enum.GetNames(typeof(RoshamboValue)).Length + 1)
+                {
+                    int x = int.Parse(userInput);
+                    humanPlayer.Value = (RoshamboValue)x;
                 }
             }
             catch
             {
-                Console.WriteLine("Could not find matching value, please try again");
+                Console.WriteLine("Could not find that choice, please try again.");
             }
         }
     }
 
-    private void 
+    //private void 
 }
