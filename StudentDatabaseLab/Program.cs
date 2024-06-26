@@ -24,6 +24,8 @@ Extra Challenges:
  */
 
 
+using Spectre.Console;
+
 Student student = new Student();
 student.main();
 public class Student
@@ -69,11 +71,39 @@ public class Student
     {
         Console.WriteLine("Help is on the way. Now printing the entire table:\n");
         Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}","ID", "Name", "Hometown", "Favorite Food" + Environment.NewLine));
-        for (int i = 0; i < students.GetLength(0); i++)
+
+        var table = new Table().Centered();
+
+        AnsiConsole.Live(table).Start(ctx =>
         {
-            Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}",i+1, students[i, 0], students[i, 1], students[i, 2]));
-        }
-        Console.WriteLine("\nReturning to main menu.");
+
+            table.AddColumn("ID");
+            ctx.Refresh();
+            Thread.Sleep(100);
+            table.AddColumn("Name");
+            ctx.Refresh();
+            Thread.Sleep(100);
+            table.AddColumn("Hometown");
+            ctx.Refresh();
+            Thread.Sleep(100);
+            table.AddColumn("Favorite Food");
+            ctx.Refresh();
+            Thread.Sleep(100);
+            table.Border(TableBorder.Ascii2);
+            ctx.Refresh();
+            Thread.Sleep(100);
+
+
+            for (int i = 0; i < students.GetLength(0); i++)
+            {
+                //Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}",i, students[i, 0], students[i, 1], students[i, 2]));
+                table.AddRow((i+1).ToString(), students[i, 0], students[i, 1], students[i, 2]);
+                ctx.Refresh();
+                Thread.Sleep(100);
+            }
+        });
+
+
     }
 
     //TODO Change from converting to string and searching array to converting string to into and using that to index?
@@ -142,6 +172,14 @@ public class Student
     {
         while(true) { 
             Console.WriteLine($"Main Menu:");
+
+            var userSelection = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("Main Menu:")
+                    .PageSize(10)
+                    .AddChoices(new[] {"Full Menu", "Search For a student"} )
+                );
+            Console.WriteLine(userSelection);
             string studentName = StudentDetailSelection("name or ID",0);
 
             Console.WriteLine($"Looking up details for {studentName}.");
