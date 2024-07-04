@@ -70,7 +70,7 @@ public class Student
     private void HelpResponse()
     {
         Console.WriteLine("Help is on the way. Now printing the entire table:\n");
-        Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}","ID", "Name", "Hometown", "Favorite Food" + Environment.NewLine));
+        //Console.WriteLine(string.Format(" {0,-2} {1,-9} {2,-13} {3,-10}","ID", "Name", "Hometown", "Favorite Food" + Environment.NewLine));
 
         var table = new Table().Centered();
 
@@ -101,6 +101,13 @@ public class Student
                 ctx.Refresh();
                 Thread.Sleep(100);
             }
+            
+            //var userSelection = AnsiConsole.Prompt(
+            //    new SelectionPrompt<Table>()
+            //    .Title("Full Table")
+            //    .PageSize(10)
+            //    .AddChoices(table)
+            //    );
         });
 
 
@@ -170,15 +177,19 @@ public class Student
     }
     public void main()
     {
-        while(true) { 
-            Console.WriteLine($"Main Menu:");
-
+        while(true) {
+            //testing out Spectre stuff
+            string[] options = ["Full List", "Search For a student"];
             var userSelection = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
                     .Title("Main Menu:")
                     .PageSize(10)
-                    .AddChoices(new[] {"Full Menu", "Search For a student"} )
+                    .AddChoices(options)
                 );
+            if ( userSelection == options[0] )
+            {
+                HelpResponse();
+            }
             Console.WriteLine(userSelection);
             string studentName = StudentDetailSelection("name or ID",0);
 
