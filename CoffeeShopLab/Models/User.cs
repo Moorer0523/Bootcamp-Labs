@@ -2,8 +2,9 @@
 
 namespace CoffeeShopLab.Models;
 
-public class UserModel
+public class User
 {
+    public int UserId { get; set; }
     [Required(ErrorMessage = "First Name is required")]
     public string FirstName { get; set; }
     [Required(ErrorMessage = "Last Name is required")]

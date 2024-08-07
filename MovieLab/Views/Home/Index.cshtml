@@ -1,0 +1,9 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<h1>Movie Search</h1>
+<form asp-action="Search" method="post">
+    <label>Search for a movie:</label>
+    <input type="text" name="movieName" />
+    <button type="submit">Submit</button>
+</form>

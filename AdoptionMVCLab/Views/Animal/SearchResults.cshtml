@@ -1,0 +1,21 @@
+﻿@model List<AnimalModel>
+
+@foreach(AnimalModel animal in Model)
+{
+    <div class="card" style="width: 18rem;">
+        @{
+            string adoptionMessage = "Adopt me";
+            string adoptionAction = "";
+        }
+        <img class="card-img-top" src="~/images/@animal.ImageName" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">@animal.PetName</h5>
+            <p class="card-text">@animal.Discription</p>
+            @if (!animal.IsAdopted)
+            {
+                <a asp-action="" class="btn btn-primary">@message</a>
+            }
+
+        </div>
+    </div>
+}
