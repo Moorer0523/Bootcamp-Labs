@@ -1,5 +1,7 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TacosFastFoodAPI.Data;
+using TacosFastFoodAPI.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<TacoDBContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB")));
+
+//add automapper, looks at the assembly of where this program is being ran, to look at the mappings
+//builder.Services.AddAutoMapper(typeof(DrinkProfile), typeof(TacoProfile));
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

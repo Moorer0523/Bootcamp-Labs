@@ -52,7 +52,7 @@ public class TacoController : ControllerBase
         _tacoDB.Add(newTaco);
         _tacoDB.SaveChanges();
 
-        return Created($"/tacos/{newTaco.Id}",newTaco);
+        return CreatedAtAction(nameof(GetTacoById), new {id = newTaco.Id},newTaco);
     }
 
     [HttpDelete("{id}")]
