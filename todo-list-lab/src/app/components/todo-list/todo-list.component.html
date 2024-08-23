@@ -1,0 +1,31 @@
+<!-- 
+<ul>
+    <li *ngFor="let task of todoList">
+        <div [ngClass]="{taskComplete: !task.completed}">
+            {{task.task}} - {{task.duration}} minutes
+            <button *ngIf="task.completed" (click)="task.completed = !task.completed" class="btn btn-outline-primary">Mark Complete</button>
+            
+            <button (click)="removeTask(task)">X</button>
+            
+        </div>
+    </li>
+</ul> -->
+<div class="row">
+        <div class="card" *ngFor="let task of todoList">
+            <div [ngClass]="{ taskComplete: !task.completed }">
+                <div class="card-body">
+                <h5 class="card-title">{{ task.task }}</h5>
+                <p class="card-text">Estimated Duration: {{ task.duration }} minutes</p>
+                <button
+                    *ngIf="task.completed"
+                    (click)="task.completed = !task.completed"
+                    class="btn btn-outline-primary">
+                    Mark Complete
+                </button>
+                <button (click)="removeTask(task)" class="btn btn-outline-secondary">
+                    X
+                </button>
+                </div>
+            </div>
+        </div>
+</div>
