@@ -1,4 +1,4 @@
-<!-- 
+<!--  first attempt
 <ul>
     <li *ngFor="let task of todoList">
         <div [ngClass]="{taskComplete: !task.completed}">
@@ -10,6 +10,8 @@
         </div>
     </li>
 </ul> -->
+
+<!-- lets try bootstrap bootstrap
 <div class="row">
         <div class="card" *ngFor="let task of todoList">
             <div [ngClass]="{ taskComplete: !task.completed }">
@@ -27,5 +29,157 @@
                 </button>
                 </div>
             </div>
+    </div>
+</div> -->
+
+<!-- idk i hate this
+<table class="table">
+    <tr class="table" *ngFor="let taskList of groupedTodos"> 
+        <td *ngFor="let task of taskList">
+            <div class="card">
+                <div [ngClass]="{ taskComplete: !task.completed }">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ task.task }}</h5>
+                    <p class="card-text">Estimated Duration: {{ task.duration }} minutes</p>
+                    <button
+                        *ngIf="task.completed"
+                        (click)="task.completed = !task.completed"
+                        class="btn btn-outline-primary">
+                        Mark Complete
+                    </button>
+                    <button (click)="removeTask(task)" class="btn btn-outline-secondary">
+                        X
+                    </button>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table> -->
+
+<div class="taskBackground">
+  <div class="taskFrame">
+    <h1 style="padding-bottom: 0px">Todo List</h1>
+    <p>A place to store your todos</p>
+
+    <!-- Start of the main todolist area -->
+    <div *ngIf="!todoList.every(checkIfComplete)" [@openClose]="todoState">
+      <div class="container">
+        <div class="form-group">
+          <strong>Filter by task</strong>
+          <input type="text" class="form-control" [(ngModel)]="filterInput" />
         </div>
+      </div>
+      <br />
+
+      <!-- Main Task generation area -->
+      <table>
+        <tbody>
+          <tr *ngFor="let task of todoList | tableFilter : filterInput; let i = index" >
+
+            <th>{{ i + 1 }}.</th>
+            <td style="padding: 2px;" >
+              <button
+                *ngIf="!task.completed"
+                (click)="task.completed = !task.completed"
+                class="completeButton"
+              >
+                Mark Complete
+              </button>
+              <span [ngClass]="{ taskComplete: task.completed }">
+                {{ task.task }} -- ({{ task.duration | number : "1.0-1" }} hrs)
+              </span>
+            </td>
+            <td>
+              <span *ngIf="task.priority === 'high'" class="highPriority" >
+                &uarr; High Priority
+              </span>
+              <span *ngIf="task.priority === 'low'" class="lowPriority">
+                &darr; Low Priority
+              </span>
+            </td>
+            <td style="text-align: right">
+              <button (click)="removeTask(task)" class="deleteButton">X</button>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+    <br />
+    <!-- end of the main todolist area -->
+
+    <!-- start of completed screen area -->
+    <div *ngIf="todoList.every(checkIfComplete)" class="slide-in-blurred-top">
+        All tasks are complete!<br>
+        <span class="completedImage"><img src="/completed.jpg" width="400"/></span>
+    </div>
+
+    <!-- end of completed screen area -->
+
+    <!-- start of new todo submission area-->
+    <div class="container">
+      <div class="form-group">
+        <label for="task">Enter a new task:</label>
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="task"
+          aria-describedby="taskName"
+          placeholder="Call Mom"
+        />
+      </div>
+      <div class="form-group">
+        <label for="hoursEstimate"
+          >How many hours would this take?</label
+        >
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="duration"
+          aria-describedby="hoursEstimate"
+          placeholder="1"
+        />
+      </div>
+      <div class="form-group">
+        <label for="priority" style="padding-right: 10px">Priority: </label>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            [(ngModel)]="priority"
+            value="high"
+            name="inlineRadioOptions"
+          />
+          <label class="form-check-label" for="inlineRadio1">High</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            [(ngModel)]="priority"
+            value="normal"
+            name="inlineRadioOptions"
+          />
+          <label class="form-check-label" for="inlineRadio2">Normal</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            [(ngModel)]="priority"
+            value="low"
+            name="inlineRadioOptions"
+          />
+          <label class="form-check-label" for="inlineRadio3">Low</label>
+        </div>
+      </div>
+
+        <button type="submit" (click)="submitTask()" class="submitButton" onsubmit="this.reset()" >
+            Add
+        </button>
+    </div>
+  </div>
+  <!-- end of new todo submission area-->
 </div>
