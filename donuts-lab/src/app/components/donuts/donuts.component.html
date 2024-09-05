@@ -1,1 +1,7 @@
-<div>works</div>
+<div class="container text-center">
+  <div *ngFor="let donutList of groupedDonutList" class="row">
+    <div *ngFor="let donut of donutList" class="col">
+      <app-donut-card [donut]="donut"></app-donut-card>
+    </div>
+  </div>
+</div>

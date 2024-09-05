@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Donut } from '../../models/donut';
+
+
 
 @Component({
   selector: 'app-donut-card',
@@ -7,8 +10,9 @@ import { Component } from '@angular/core';
   templateUrl: './donut-card.component.html',
   styleUrl: './donut-card.component.css'
 })
-export class DonutCardComponent {
+export class DonutCardComponent{
 
+  @Input() donut: Donut | null = null;
 
 }
 
