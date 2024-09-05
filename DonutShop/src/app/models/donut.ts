@@ -4,4 +4,4 @@ export interface Donut {
     name: string
     photo: string
     photo_attribution: string
-  }
+}

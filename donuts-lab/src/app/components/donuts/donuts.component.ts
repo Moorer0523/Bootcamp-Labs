@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Donut } from '../../models/donut';
 import { DonutAPIService } from '../../services/donut/donut-api.service';
+import { DonutResponse } from '../../models/donut-response';
 
 @Component({
   selector: 'app-donuts',
@@ -11,15 +12,14 @@ import { DonutAPIService } from '../../services/donut/donut-api.service';
 })
 export class DonutsComponent {
 
-  siteLists : Donut
-
+  donutList : Donut[] | null = null
   constructor(private donutAPI: DonutAPIService) {}
 
   
   ngOnInit() {
     this.donutAPI.getList().subscribe({
       next: (data) => {
-        this.siteLists = data
+        this.donutList = data.results
       },
       error: (error) => {
         console.log(error)
