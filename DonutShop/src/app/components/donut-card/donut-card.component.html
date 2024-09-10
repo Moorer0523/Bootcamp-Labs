@@ -1,7 +1,9 @@
-<div class="card">
+<div class="card" style="width: 500px;">
+  <div class="card-header">
+    <img [src]="donut?.photo" style="width: 100px;"/>
+  </div>
   <div class="card-body">
-    <img [src]="donut?.photo" />
-    <p>{{ donut?.name }}</p>
-    <img [src]="donut?.photo_attribution" />
+    <p >{{ donut?.name }}</p>
+    <button [routerLink]="['/donut-detail', donut?.id]">View Details</button>
   </div>
 </div>
