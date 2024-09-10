@@ -4,3 +4,6 @@ GET {{RestaurantFavesAPI_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+GET {{RestaurantFavesAPI_HostAddress}}/api/Orders/
+Accept: application/json
