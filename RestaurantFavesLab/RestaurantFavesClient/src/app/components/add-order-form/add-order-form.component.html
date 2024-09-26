@@ -1,0 +1,47 @@
+<form>
+<div class="container" [formGroup]="orderForm">
+  <div class="form-group">
+    <h1>Submit a new Meal Review</h1>
+    <label for="description">What meal did you have:</label>
+    <input
+      type="text"
+      class="form-control"
+      formControlName="description"
+      aria-describedby="description"
+      placeholder="Tuna Salad"
+    />
+    <label for="restaurant">Where was this meal from?</label>
+    <input
+      type="text"
+      class="form-control"
+      formControlName="restaurant"
+      aria-describedby="restaurant"
+      placeholder="McDon't"
+    />
+    <label class="form-label"
+      >Meal Rating: {{ orderForm.value.rating }}
+    </label>
+    <input
+      type="range"
+      class="form-range"
+      min="0"
+      max="5"
+      formControlName="rating"
+    />
+  </div>
+  <div class="form-check">
+    <label class="form-check-label"
+      >Would you ever return here?</label
+    >
+    <input
+      class="form-check-input"
+      type="checkbox"
+      value=""
+      formControlName="orderAgain"
+    />
+  </div>
+  <button type="submit" (click)="submitOrder()" class="submitButton" onsubmit="this.reset()" >Submit Review</button>
+
+
+</div>
+</form>

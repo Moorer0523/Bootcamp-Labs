@@ -1,1 +1,26 @@
-<p>order-container works!</p>
+<div class="window">
+<div class="appContainer">
+  <app-add-order-form style="padding: 5px;" (update)="addNewOrder($event)"></app-add-order-form>
+    <div class="filterContent">
+        <div class="form-group">
+            <strong>Filter Orders: </strong>
+            <input type="text" class="form-control" [(ngModel)]="filterInput"/>
+    </div>
+</div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Dish</th>
+        <th scope="col">Restaurant</th>
+        <th scope="col">Rating</th>
+        <th scope="col">Reorder</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Inserting Component as row : https://medium.com/javascript-everyday/when-to-use-an-attribute-selector-for-angular-components-7e788ba1bfe7 -->
+      <tr *ngFor="let order of orders | orderFilter : filterInput; let i = index" app-order-row [order]="order" [index]="i" (delete)="deleteOrder($event)"></tr>
+    </tbody>
+  </table>
+</div>

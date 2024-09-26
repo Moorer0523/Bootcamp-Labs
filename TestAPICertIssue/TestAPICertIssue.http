@@ -1,0 +1,6 @@
+@TestAPICertIssue_HostAddress = http://localhost:5277
+
+GET {{TestAPICertIssue_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

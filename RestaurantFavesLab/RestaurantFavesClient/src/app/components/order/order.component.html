@@ -1,4 +1,7 @@
-<p>order works!</p>
-
-{{order?.restaurant}}
-{{order?.description}}
+    
+    <td scope="row">{{index + 1}}</td>
+    <td>{{ order?.description }}</td>
+    <td>{{ order?.restaurant }}</td>
+    <td>{{order?.rating}}</td>
+    <td>{{order?.orderAgain}}</td>
+    <td><button (click)="deleteOrder()">Delete</button></td>

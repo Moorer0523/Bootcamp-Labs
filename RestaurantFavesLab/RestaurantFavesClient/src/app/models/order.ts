@@ -8,3 +8,9 @@ export interface Order {
   orderAgain: boolean
 }
 
+// export class Order {
+//   public constructor(init?: Partial<Order>){
+//     Object.assign(this, init)
+//   }
+// }
+

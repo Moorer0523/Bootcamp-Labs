@@ -1,37 +1,40 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 import { OrderContainerComponent } from '../order-container/order-container.component';
 import { Order } from '../../models/order';
 import { RestaurantApiService } from '../../services/restaurant-api.service';
 
 @Component({
-  selector: 'app-order',
+  selector: "[app-order-row]",
   standalone: true,
   imports: [CommonModule, OrderContainerComponent],
   templateUrl: './order.component.html',
   styleUrl: './order.component.css'
 })
 export class OrderComponent {
-  order : Order | null = null;
-  restaurantService = inject(RestaurantApiService)
 
-  constructor(private restrauntAPi: RestaurantApiService) {}
+  @Input() order : Order | null = null
 
-  ngOnInit() {
-    this.loadOrder();
+  @Input() index : number = 0
+
+  @Output() delete: EventEmitter<Order> = new EventEmitter
+
+  restaurantApi = inject(RestaurantApiService)
+
+  postOrder() {
+    if (this.order != null)
+      this.restaurantApi.postOrder(this.order)
   }
 
-  loadOrder() {
-    this.restrauntAPi.getOrder(1).subscribe({
-      next: (data) => {
-        this.order = data;
-      },
-      error: (error) => {
-        console.log(error);
-      },
-      complete: () => {
-        console.log('complete');
-      },
-  })
+  putOrder() {
+    if(this.order != null)
+      this.restaurantApi.putOrder(this.order)
+  }
+
+  deleteOrder() {
+    if(this.order != null){
+      this.delete.emit(this.order)
+    }
+
   }
 }

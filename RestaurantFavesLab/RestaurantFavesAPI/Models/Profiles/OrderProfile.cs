@@ -9,7 +9,7 @@ public class OrderProfile : Profile
 {
     public OrderProfile()
     {
-        CreateMap<Order, OrderDTO>();
+        CreateMap<OrderDTO, Order>();
         CreateMap<UpdateOrderDTO, Order>()
             .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
     }
