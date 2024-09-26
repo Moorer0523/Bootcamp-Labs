@@ -37,17 +37,32 @@ public class Main {
                 }
             }
 
-            String finalMovieCategory = movieCategory;
-            List<Movie> filterdList = movies.stream()
-                    .filter(x -> x.getCategory().toLowerCase().contains(finalMovieCategory.toLowerCase())).toList();
+//            String finalMovieCategory = movieCategory;
+//
+//            Just no. Isn't good.
+//            movies.stream()
+//                    .filter(x -> x.getCategory().toLowerCase().contains(finalMovieCategory.toLowerCase()))
+//                    .forEach(x -> System.out.printf("Title: %25s | Category: %-10s\n",x.getTitle(), x.getCategory()));
+//
+//
+//
+//            List<Movie> filterdList = movies.stream()
+//                    .filter(x -> x.getCategory().toLowerCase().contains(finalMovieCategory.toLowerCase())).toList();
+//
+//            if(filterdList.size() == 0){
+//                System.out.println("No matches found");
+//            }
+//            else
+//            {
+//                filterdList.forEach(x -> System.out.printf("Title: %25s | Category: %-10s\n",x.getTitle(), x.getCategory()));
+//            }
 
-            if(filterdList.size() == 0){
+
+            Abomination thisIsFine = new Abomination(movies);
+            if (!thisIsFine.getFilteredMovies(movieCategory)) {
                 System.out.println("No matches found");
             }
-            else
-            {
-                filterdList.forEach(x -> System.out.printf("Title: %25s | Category: %-10s\n",x.getTitle(), x.getCategory()));
-            }
+
 
             System.out.println("Would you like to search again? (y/n)");
             String answer = input.nextLine();
